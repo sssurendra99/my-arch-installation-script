@@ -97,8 +97,10 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 systemctl enable NetworkManager
 
-umount -R /mnt
+exit
 
 EOF
 
-reboot
+umount -R /mnt
+
+shutdown now
