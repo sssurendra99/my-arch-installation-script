@@ -16,6 +16,9 @@ read SWAP
 echo "Please enter ROOT parition: (eg: /dev/sda3)"
 read ROOT
 
+echo "Please enter a user: "
+read USER
+
 # Let's set up a password for the installation
 PASSWORD="arch@123"
 
@@ -81,6 +84,12 @@ EOL
 
 mkinitcpio -P
 
+useradd -m $USER
+usermod -aG wheel,storage,power,audio $USER
+echo $USER:$PASSWORD | chpasswd
+sed -i 's/^# %wheel ALL=(ALL:ALL) ALL/%wheel ALL=(ALL:ALL) ALL/' /etc/sudoers
+
+
 # Boot Loader
 grub-install --target=x86_64-efi --efi-directory=/mnt/boot --bootloader-id=GRUB
 
@@ -88,6 +97,8 @@ grub-mkconfig -o /boot/grub/grub.cfg
 
 systemctl enable NetworkManager
 
-passwd
+umount -R /mnt
 
 EOF
+
+reboot
