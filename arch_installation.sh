@@ -54,7 +54,7 @@ genfstab -U /mnt >> /mnt/etc/fstab
 
 echo "\nChange root into new system"
 
-arch-chroot /mnt
+arch-chroot /mnt /bin/bash <<EOF
 
 
 # Set up the timezone
@@ -73,11 +73,11 @@ echo "LANG=en_us.UTF-8" > /etc/locale.conf
 touch /etc/hostname
 echo "myarch" >> /etc/hostname
 
-cat <<EOF > /etc/hosts
+cat <<EOL > /etc/hosts
 127.0.0.1	localhost
 127.0.1.1	myarch
 ::1     ip6-localhost ip6-loopback
-EOF
+EOL
 
 mkinitcpio -P
 
@@ -90,3 +90,4 @@ systemctl enable NetworkManager
 
 passwd
 
+EOF
